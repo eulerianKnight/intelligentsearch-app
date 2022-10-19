@@ -44,8 +44,10 @@ ENV PORT 8777
 # Expose Ports
 EXPOSE $PORT
 
-# Setting persistence
-VOLUME ['/app-data']
+## Setting persistence
+#VOLUME ['/app-data']
 
 # Running application
-CMD gunicorn -b :$PORT main:app -w 2 --threads 2 --reload
+#CMD gunicorn -b :$PORT main:app --timeout 30 --reload
+ENTRYPOINT ["python"]
+CMD ["main.py"]

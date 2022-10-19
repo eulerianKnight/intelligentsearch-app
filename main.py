@@ -6,8 +6,13 @@ from flask import Flask, request, jsonify
 import time
 
 from haystack.document_stores import ElasticsearchDocumentStore
-from haystack.nodes import EmbeddingRetriever, PDFToTextConverter, PreProcessor, ElasticsearchRetriever
+from haystack.nodes import DensePassageRetriever, PDFToTextConverter, PreProcessor, ElasticsearchRetriever
 from haystack.pipelines import DocumentSearchPipeline
+# from haystack.utils import launch_es
+#
+# # Launch Elasticsearch
+# launch_es()
+
 
 # Application Settings
 app = Flask(__name__)
@@ -17,7 +22,7 @@ CORS(app)
 app.config['input'] = 'data/input'
 
 # ElasticSearch server host information
-app.config['host'] = os.environ.get('ELASTICSEARCH_HOST', 'localhost')
+app.config['host'] = "127.0.0.1"
 app.config['username'] = ''
 app.config['password'] = ''
 app.config['port'] = '9200'
@@ -33,6 +38,9 @@ def home():
 @app.route('/set_embed', methods=['POST'])
 def set_embed():
     """Update Embeddings"""
+    time.sleep(45)
+    print(app.config['host'])
+    print(app.config['port'])
     index = request.form['index']
     document_store = ElasticsearchDocumentStore(host=app.config['host'],
                                                 port=app.config['port'],
@@ -40,10 +48,10 @@ def set_embed():
                                                 password=app.config['password'],
                                                 index=index,
                                                 embedding_field='embedding',
-                                                embedding_dim=786)
-    retriever_pdf = EmbeddingRetriever(document_store=document_store,
-                                       embedding_model='distilroberta-base-msmarco-v2',
-                                       model_format='sentence_transformers')
+                                                similarity='cosine')
+    retriever_pdf = DensePassageRetriever(document_store=document_store,
+                                          query_embedding_model='facebook/dpr-question_encoder-single-nq-base',
+                                          passage_embedding_model='facebook/dpr-ctx_encoder-single-nq-base')
     document_store.update_embeddings(retriever_pdf)
     return jsonify({'status': 'Success',
                     'message': 'Successfully embed method updated in ElasticSearch Document'})

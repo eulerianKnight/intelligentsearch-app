@@ -1,0 +1,17 @@
+---
+# Default Elasticsearch configuration from Elasticsearch base image.
+# https://github.com/elastic/elasticsearch/blob/main/distribution/docker/src/docker/config/elasticsearch.yml
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
+
+
+# Disable production mode
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set_vm_max_map_count_to_at_least_262144
+discovery.type: single-node
+
+# Disable X-Pack Security
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-stack-security.html
+xpack.security.enabled: false
+
