@@ -8,11 +8,6 @@ import time
 from haystack.document_stores import ElasticsearchDocumentStore
 from haystack.nodes import DensePassageRetriever, PDFToTextConverter, PreProcessor, ElasticsearchRetriever
 from haystack.pipelines import DocumentSearchPipeline
-# from haystack.utils import launch_es
-#
-# # Launch Elasticsearch
-# launch_es()
-
 
 # Application Settings
 app = Flask(__name__)
@@ -22,7 +17,7 @@ CORS(app)
 app.config['input'] = 'data/input'
 
 # ElasticSearch server host information
-app.config['host'] = "127.0.0.1"
+app.config['host'] = os.environ['DOCKER_GATEWAY_HOST']
 app.config['username'] = ''
 app.config['password'] = ''
 app.config['port'] = '9200'

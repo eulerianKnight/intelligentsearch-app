@@ -15,11 +15,11 @@ services:
       - "XPACK_SECURITY_ENABLED=false"
     networks:
       - elk
-    healthcheck:
-      test: "curl http://elasticsearch:9200"
-      interval: "30s"
-      timeout: "30s"
-      retries: 3
+#    healthcheck:
+#      test: "curl http://elasticsearch:9200"
+#      interval: "30s"
+#      timeout: "30s"
+#      retries: 3
     ulimits:
       memlock:
           soft: -1
@@ -36,8 +36,12 @@ services:
       - "8777:8777"
     depends_on:
       - elasticsearch
-    links:
-      - elasticsearch
+    environment:
+      DB_UPSTREAM: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}:9200
+    networks:
+      - elk
+#    links:
+#      - elasticsearch
 
 networks:
   elk:
