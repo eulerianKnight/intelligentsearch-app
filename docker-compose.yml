@@ -4,6 +4,7 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     container_name: elasticsearch
+    hostname: elasticsearch
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
@@ -36,8 +37,6 @@ services:
       - "8777:8777"
     depends_on:
       - elasticsearch
-    environment:
-      DB_UPSTREAM: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}:9200
     networks:
       - elk
 #    links:

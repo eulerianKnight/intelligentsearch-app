@@ -1,6 +1,7 @@
 FROM continuumio/anaconda3
 
 RUN apt-get update \
+    && apt-get -y install sudo \
     && apt-get install -y locales \
     && apt-get update \
     && dpkg-reconfigure -f noninteractive locales \
@@ -28,6 +29,8 @@ COPY requirements.txt /usr/src/app/
 RUN apt-get install -y poppler-utils
 
 RUN pip install --no-cache-dir -r requirements.txt
+RUN wget --no-check-certificate https://dl.xpdfreader.com/xpdf-tools-linux-4.04.tar.gz
+RUN tar -xvf xpdf-tools-linux-4.04.tar.gz && sudo cp xpdf-tools-linux-4.04/bin64/pdftotext /usr/local/bin
 
 # Copy src code to container
 COPY . /usr/src/app

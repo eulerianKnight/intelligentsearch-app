@@ -17,7 +17,7 @@ CORS(app)
 app.config['input'] = 'data/input'
 
 # ElasticSearch server host information
-app.config['host'] = os.environ['DOCKER_GATEWAY_HOST']
+app.config['host'] = 'elasticsearch'
 app.config['username'] = ''
 app.config['password'] = ''
 app.config['port'] = '9200'
